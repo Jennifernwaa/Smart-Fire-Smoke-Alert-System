@@ -1,18 +1,27 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+#include "adc.h"
+#include "pwm.h"
+#include "timer.h"
+#include "fan.h"
+#include "flame_sensor.h"
+#include "gas_sensor.h"
+#include "gsm.h"
+#include "lcd.h"
+#include "led.h"
+#include "switch.h"
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
-}
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
+#include <avr/io.h>
+#include <avr/interrupt.h>
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+int main() {
+    // Initialize peripherals
+
+
+    sei();
+
+    while (1) {
+
+    }
 }

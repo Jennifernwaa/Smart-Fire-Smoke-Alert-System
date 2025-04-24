@@ -42,20 +42,41 @@ uint16_t readGasSensor() {
   return ppm;
 }
 
-int main() {
+
+int main(){
+
+
+  // Initialize the gas sensor
   initGasSensor();
-  Serial.begin(9600); // Initialize the Serial communication
+
+  // Set up serial communication for debugging
+  Serial.begin(9600);
+
+  float sensor_volt;
+  float RS_air;
+  float R0;
+  float sensorValue = 0;
 
   while (1) {
-    float gasPPM = readGasSensor();
-    if (gasPPM > 200) {
-      Serial.print("Gas concentration: ");
-      Serial.print(gasPPM, 5); // Print gasPPM with 5 decimal places
-      Serial.println(" ppm");
-    } else {
-      Serial.print("Gas concentration: ppm less than 200");
+    for (int x = 0; x < 100; x++) {
+      sensorValue += analogRead(A0);  // A0 connected to MQ9 AO
     }
-    _delay_ms(1000);
-  }
-}
+    sensorValue /= 100.0;
+  
+    sensor_volt = (sensorValue / 1024.0) * 5.0;
+    RS_air = (5.0 - sensor_volt) / sensor_volt;
+    R0 = RS_air / 9.9; // Based on MQ9 datasheet
+  
+    Serial.print("sensor_volt = ");
+    Serial.print(sensor_volt);
+    Serial.println(" V");
+  
+    Serial.print("R0 = ");
+    Serial.println(R0);
+  
 
+    // Delay for a second before the next reading
+    delay(1000);
+  }
+  return 0;
+}

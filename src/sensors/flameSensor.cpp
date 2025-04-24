@@ -1,4 +1,4 @@
-#include "flame_sensor.h"
+#include "flameSensor.h"
 #include <avr/io.h>
 
 void initializeFlameSensor() {

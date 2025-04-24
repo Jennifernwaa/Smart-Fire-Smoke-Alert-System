@@ -1,14 +1,15 @@
 #include <Arduino.h>
 
-#include "adc.h"
-#include "pwm.h"
-#include "timer.h"
-#include "fan.h"
-#include "flame_sensor.h"
-#include "gas_sensor.h"
+#include "utils/adc.h"
+#include "utils/pwm.h"
+#include "utils/timer.h"
+#include "output/fan.h"
+#include "sensors/flame_sensor.h"
+#include "sensors/gas_sensor.h"
 #include "gsm.h"
-#include "lcd.h"
-#include "led.h"
+#include "output/lcd.h"
+#include "output/led.h"
+#include "output/buzzer.h"
 #include "switch.h"
 
 

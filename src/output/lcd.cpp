@@ -1,5 +1,7 @@
 #include "lcd.h"
-#include "timer.h"
+#include "utils/timer.h"
+
+#include <avr/io.h>
 #include <util/delay.h>
 
 /*

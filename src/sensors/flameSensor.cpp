@@ -1,8 +1,7 @@
 #include "flameSensor.h"
 #include <avr/io.h>
 
-void initializeFlameSensor() {
-    // Configure the appropriate pin as input for the flame sensor
+void initFlameSensor() {
     DDRH &= ~(1 << PH3); // Set PH3 (Pin 6) as input
 }
 

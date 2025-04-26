@@ -3,8 +3,7 @@
 
 #include <avr/io.h>
 
+void initFlameSensor();
+bool isFlameDetected();
 
-void initializeFlameSensor();
-void flameDetectedLoop();
-
-#endif // FLAME_SENSOR_H
+#endif 

@@ -3,18 +3,19 @@
 
 void initializeFlameSensor() {
     // Configure the appropriate pin as input for the flame sensor
-    // Example: DDRx &= ~(1 << PINx); // Replace x with the appropriate port and pin
+    DDRH &= ~(1 << PH3); // Set PH3 (Pin 6) as input
 }
 
-void flameDetectedLoop() {
-    // Read the pin connected to the flame sensor
-    // Example: return (PINx & (1 << PINx)); // Replace x with the appropriate port and pin
-    // Placeholder, replace with actual implementation
+// bool isFlameDetected() {
+//     // Read the state of the flame sensor pin
+//     return (PINH & (1 << PH3)) == 0; // Active low, so check if the pin is low
+// }
 
-    // Assuming the flame sensor is connected to PD2
-     // Turn on buzzer (assuming buzzer is connected to PB1)
-
-    // Wait before starting the fan
-     // Turn on fan (assuming relay is connected to PD3)
-     // Keep fan on for some time
-        }
+bool isFlameDetected() {
+    // Read the state of the flame sensor pin
+    if (!(PINH & (1 << PH3))) { // Active low, so check if the pin is low
+        return true; // Flame detected
+    } else {
+        return false; // No flame detected
+    }
+}

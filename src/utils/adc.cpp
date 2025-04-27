@@ -1,6 +1,7 @@
 #include "adc.h"
+#include "utils/timer.h"
+
 #include <avr/io.h>
-#include <util/delay.h>
 
 void initADC0()
 {

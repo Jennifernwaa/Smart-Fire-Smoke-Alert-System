@@ -2,7 +2,6 @@
 #include "utils/timer.h"
 
 #include <avr/io.h>
-#include <util/delay.h>
 
 /*
  * Initializes all pins related to the LCD to be outputs

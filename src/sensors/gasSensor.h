@@ -20,6 +20,12 @@ float readGasConcentration();
 // Check if gas level is above threshold
 bool isGasDetected();
 
+// Check if the gas sensor has failed
+bool isSensorFailed();
+
+// Reset gas sensor state
+void resetSensor();
+
 // Process gas sensor reading (call this in main loop)
 void processGasSensor();
 

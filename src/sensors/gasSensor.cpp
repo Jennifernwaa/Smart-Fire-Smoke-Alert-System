@@ -81,28 +81,36 @@ float readGasConcentration() {
 }
 
 bool isGasDetected() {
+
+    static unsigned long lastAlertTime = 0;
+    const unsigned long resetTimeMs = 4900; // Reset counter after 4.9 seconds of no detections
+
     // If sensor is in failure mode, don't try to detect gas
     if (sensorFailure) {
-        return false;
         Serial.println("Sensor failure, cannot detect gas");
+        return false;
     }
     
     float ratio = readGasConcentration();
+    unsigned long currentTime = millis();
     
     // Check if gas concentration exceeds threshold
     if (ratio < THRESHOLD_RATIO) {
         consecutiveAlerts++;
+        lastAlertTime = currentTime;
         
         // Only report gas detection after multiple consecutive alerts
         if (consecutiveAlerts >= CONSECUTIVE_READINGS_REQUIRED) {
             return true;
         }
     } else {
-        // Reset consecutive alert counter
-        consecutiveAlerts = 0;
+        // Only reset the counter if it's been a while since the last alert
+        if (currentTime - lastAlertTime > resetTimeMs) {
+            consecutiveAlerts = 0;
+        }
     }
-    return false;
     Serial.println("Gas is not detected, but it is working")
+    return false;
 }
 
 bool isSensorFailed() {

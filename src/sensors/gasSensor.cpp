@@ -44,7 +44,7 @@ float readGasConcentration() {
     // Take multiple readings for stability
     for (int i = 0; i < 100; i++) {
         sensorValue += readADC();
-        _delay_us(10); // Short delay between readings for stability
+        delayUs(10); // Short delay between readings for stability
     }
     sensorValue /= 100.0;
     

@@ -1,12 +1,22 @@
+
 #include "timer.h"
-#include <avr/io.h> 
+//You many use any timer you wish for the microsecond delay and the millisecond delay
+
+
+//Timer1 is 16-bit timer → max value 65535. For microsecond delays with delayUs. More accurate for short delays due to higher resolution.
+
+
+//Timer0 is 8-bit timer → max value 255. For millisecond delays with delayMs().
+//in CTC mode with a 64 prescaler.
 
 /* Initialize timer 1, you should not turn the timer on here. Use CTC mode  .*/
 void initTimer1(){
-    TCCR1A &= ~(1 << WGM10);  // Clear bit WGM10 for CTC mode setup on Timer1
-    TCCR1A &= ~(1 << WGM11);  // Clear bit WGM11 for CTC mode setup on Timer1
-    TCCR1B |= (1 << WGM12);   // Set bit WGM12 to enable CTC mode
-    TCCR1B &= ~(1 << WGM13);  // Clear bit WGM13 to complete CTC mode setting
+
+    //CTC mode
+    TCCR1A &= ~(1 << WGM10);
+    TCCR1A &= ~(1 << WGM11);
+    TCCR1B |= (1 << WGM12);
+    TCCR1B &= ~(1 << WGM13);
 
     //prescalar set to 8
     TCCR1B |= (1 << CS01) | (1 << CS00);
@@ -18,8 +28,7 @@ void initTimer1(){
 */
 void delayUs(unsigned int delay){
     int prescalar = 8;
-
-    OCR1A = ((0.000001 * 16000000) / prescalar) - 1; // calculate the value to be put in the OCRnA register
+    OCR1A = ((0.000001 * 16000000) / prescalar) - 1; // calculate the value to be put in the OCR1A register
 
     for (unsigned int i = 0; i < delay; i++) {
         // set timer to 0
@@ -39,8 +48,7 @@ void initTimer0(){
     TCCR0A &= ~(1 << WGM00); // Ensure that WGM00 is cleared for CTC Mode
     TCCR0A |= (1 << WGM01); //HIGH WGM01 for the CTC mode
     TCCR0B |= ((1 << CS01) | (1 << CS00)); //set prescaler to 64
-    TCCR0B &= ~((1 << CS02) | (1 << WGM02)); //Clear WGM02 for CTC Mode
-
+   TCCR0B &= ~((1 << CS02) | (1 << WGM02)); //Clear WGM02 for CTC Mode
 
 }
 
@@ -50,10 +58,12 @@ void initTimer0(){
 * 100-2000 milliseconds
 */
 void delayMs(unsigned int delay){
+// idk abt this
     int prescalar = 64;
     OCR0A = ((0.001 * 16000000)/prescalar)-1; //Using the OCR0A formula in the ppt
 
     for(unsigned int i = 0; i< delay; i++){ //Runs a loop for delay milliseconds, where each iteration waits for the timer to reach the compare match.
+
         //Reset counter to 0 before it starts
         TCNT0 = 0;
 

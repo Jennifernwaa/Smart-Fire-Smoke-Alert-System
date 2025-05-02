@@ -5,5 +5,10 @@
 
 // Function prototypes
 void initPWM();
+void startBuzzer();
+void stopBuzzer();
+void initPWMFan();
+void startFan();
+void stopFan();
 
 #endif

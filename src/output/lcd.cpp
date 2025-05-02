@@ -1,13 +1,15 @@
 #include "lcd.h"
 #include "utils/timer.h"
-
-#include <avr/io.h>
+#include <util/delay.h>
 
 /*
  * Initializes all pins related to the LCD to be outputs
  */
 void initLCDPins(){
+  DDRA |= (1<<DDA0) | (1<<DDA1) | (1 << DDA2) | (1 << DDA3);
 
+  // Set RS and E pins as output
+  DDRB |= (1<<DDB4)| (1<<DDB6);
 
 } 
 
@@ -24,19 +26,18 @@ void initLCDPins(){
 void fourBitCommandWithDelay(unsigned char data, unsigned int delay){
 
   //sets the upper 4 bits of PORTA to match the upper 4 bits of data while preserving the lower 4 bits of PORTA
-//   PORTA = ((PORTA & 0xF0) | (data & 0xF0));
+  PORTA = ((PORTA & 0xF0) | (data & 0xF0));
 
-//   //RS should be Low
-//   PORTB &= ~(1<<PORTB6);
+  //RS should be Low
+  PORTB &= ~(1<<PORTB6);
 
-//   //Set Enable pin high (start signal for LCD that data is ready)
-//   PORTB |= (1<<PORTB4);
-//   delayUs(1);
+  //Set Enable pin high (start signal for LCD that data is ready)
+  PORTB |= (1<<PORTB4);
+  delayUs(1);
 
-//   //Set Enable pin low (falling edge = LCD reads the data)
-//   PORTB &= ~(1 << PORTB4);
-//   delayUs(delay); THIS IS EXAMPLE FROM PREVIOUS LAB
-
+  //Set Enable pin low (falling edge = LCD reads the data)
+  PORTB &= ~(1 << PORTB4);
+  delayUs(delay);
 
 }
 
@@ -54,31 +55,29 @@ void fourBitCommandWithDelay(unsigned char data, unsigned int delay){
  * 6. delay the provided number in MICROseconds.
  */
 void eightBitCommandWithDelay(unsigned char command, unsigned int delay) {
-
   //sends the upper 4 bits of the command to the lower 4 bits of PORTA
-    // PORTA = ((PORTA & 0xF0) | (command & 0xF0)) >> 4;
+    PORTA = ((PORTA & 0xF0) | (command & 0xF0)) >> 4;
 
-    // // RS should be low for command
-    // PORTB &= ~(1 << PORTB6);
+    // RS should be low for command
+    PORTB &= ~(1 << PORTB6);
 
-    // // Enable pin high
-    // PORTB |= (1 << PORTB4);
-    // delayUs(1);
+    // Enable pin high
+    PORTB |= (1 << PORTB4);
+    delayUs(1);
 
-    // // Enable pin low
-    // PORTB &= ~(1 << PORTB4);
+    // Enable pin low
+    PORTB &= ~(1 << PORTB4);
 
-    // // Send the lower 4 bits of the command
-    // PORTA = (PORTA & 0xF0) | (command & 0x0F);
+    // Send the lower 4 bits of the command
+    PORTA = (PORTA & 0xF0) | (command & 0x0F);
 
-    // // Enable pin high
-    // PORTB |= (1 << PORTB4);
-    // delayUs(1);
+    // Enable pin high
+    PORTB |= (1 << PORTB4);
+    delayUs(1);
 
-    // // Enable pin low
-    // PORTB &= ~(1 << PORTB4);
-    // delayUs(delay); FROM PREVIOUS LAB
-
+    // Enable pin low
+    PORTB &= ~(1 << PORTB4);
+    delayUs(delay);
 }
 
 
@@ -94,34 +93,32 @@ void eightBitCommandWithDelay(unsigned char command, unsigned int delay) {
  */
 void writeCharacter(unsigned char character){
   //delay is always 46 us
-//   int delay = 46;
+  int delay = 46;
 
-//   //2. RS High
-//   PORTB |= (1 << PORTB6);
+  //2. RS High
+  PORTB |= (1 << PORTB6);
 
+  PORTA = ((PORTA & 0xF0) | (character & 0xF0)) >> 4;
 
-//   PORTA = ((PORTA & 0xF0) | (character & 0xF0)) >> 4;
+  //Toggle Enable pin (high then low) to latch the upper bits
+  //high
+  PORTB |= (1 << PORTB4);
+  delayUs(1);
 
-//   //Toggle Enable pin (high then low) to latch the upper bits
-//   //high
-//   PORTB |= (1 << PORTB4);
-//   delayUs(1);
+  //low
+  PORTB &= ~(1 << PORTB4);
 
-//   //low
-//   PORTB &= ~(1 << PORTB4);
+  //Send the lower 4 bits of the character
+  PORTA = (PORTA & 0xF0) | (character & 0x0F);
 
+  ////Toggle Enable pin (high then low) to latch the upper bits
+  //pin high
+  PORTB |= (1 << PORTB4);
+  delayUs(1);
 
-//   //Send the lower 4 bits of the character
-//   PORTA = (PORTA & 0xF0) | (character & 0x0F);
-
-//   ////Toggle Enable pin (high then low) to latch the upper bits
-//   //pin high
-//   PORTB |= (1 << PORTB4);
-//   delayUs(1);
-
-//   // Enable pin low
-//   PORTB &= ~(1 << PORTB4);
-//   delayUs(delay);  FROM PREVIOUS LAB
+  // Enable pin low
+  PORTB &= ~(1 << PORTB4);
+  delayUs(delay); 
 
  
 }

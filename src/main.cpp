@@ -14,7 +14,7 @@
 #include "output/led.h"
 
 
-#include <util/delay.h>
+// #include <util/delay.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -46,9 +46,9 @@ int main() {
         greenLEDOff();
 
         redLEDOn();
-        timer_delay_ms(100);
+        delayMs(100);
         redLEDOff();
-        timer_delay_ms(100);
+        delayMs(100);
     } else {
         // No flame detected, deactivate alarm
         alarmActive = 0;

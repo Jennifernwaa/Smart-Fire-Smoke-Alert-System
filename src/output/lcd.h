@@ -11,5 +11,6 @@ void writeString(const char *string);
 void moveCursor(unsigned char x, unsigned char y);
 void initLCDPins();
 void initLCDProcedure();
+void clearDisplay();
 
 #endif

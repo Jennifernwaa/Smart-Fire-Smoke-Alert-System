@@ -163,6 +163,11 @@ void moveCursor(unsigned char x, unsigned char y){
 	
 }
 
+void clearDisplay(){
+  // Clear display command (0x01) and delay 1500 microseconds
+  eightBitCommandWithDelay(0x01, 1500);
+}
+
 
 /* This is the procedure outline on the LCD datasheet page 4 out of 9.
  * This should be the last function you write as it largely depends on all other

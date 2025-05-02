@@ -30,23 +30,34 @@ int main() {
   initPWMFan();
   initTimer1();
   initTimer0();
+  initFlameSensor();
 
   initLCD();
   moveCursor(0, 0); // moves the cursor to 0, position
   writeString("Testing");
 
   while (1){
-    startBuzzer();
-    redLEDOn();
-    moveCursor(0, 1); // moves the cursor to 1, position
-    writeString("Red ON");
+    if (isFlameDetected()) {
+        // Flame detected, activate alarm
+        alarmActive = 1;
+        startBuzzer();
+        moveCursor(0, 1); // moves the cursor to 1, position
+        writeString("Flame Detected!");
+        greenLEDOff();
 
-    greenLEDOn();
-    moveCursor(0, 0); // moves the cursor to 1, position
-    writeString("Green ON");
-
-
-
+        redLEDOn();
+        timer_delay_ms(100);
+        redLEDOff();
+        timer_delay_ms(100);
+    } else {
+        // No flame detected, deactivate alarm
+        alarmActive = 0;
+        moveCursor(0, 1); // moves the cursor to 1, position
+        writeString("No Flame Detected");
+        greenLEDOn();
+        moveCursor(0, 0); // moves the cursor to 1, position
+        writeString("Green ON");
+    }
 
 //bla bla
   }

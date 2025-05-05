@@ -1,36 +1,34 @@
-#include "utils/timer.h"
-#include "utils/adc.h"
 #include "gasSensor.h"
-
+#include "utils/adc.h"
+#include "utils/timer.h"
 #include <Arduino.h>
-#include <avr/io.h>
 
 // Constants for the gas sensor
 #define RL 10.0            // Load resistance in kilo ohms
-#define THRESHOLD_RATIO 0.1 // Threshold for gas detection (RS/R0)
+#define THRESHOLD_RATIO 0.15 // Adjusted threshold for gas detection (RS/R0)
 
 // R0 calibration value for clean air
-// This should be calibrated based on your specific sensor
+// This MUST be calibrated for your specific sensor in a clean air environment.
 float R0 = 0.85;
 
 // State tracking variable
 bool gasDetected = false;
 
 void initGasSensor() {
-    // Initialize gasDetected state
-    gasDetected = false;
-    Serial.println("Gas sensor initialized");
+    // No specific initialization needed for the analog pin besides ADC setup
+    Serial.println("Gas sensor initialized.");
 }
 
 float readGasRatio() {
     float sensorValueSum = 0;
+    int numReadings = 50; // Reduced number of readings for efficiency
 
     // Take multiple readings and average them
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < numReadings; i++) {
         sensorValueSum += readADC();
-        delayUs(10); // Short delay between readings for stability
+        delayUs(50); // Adjusted delay for stability
     }
-    float sensorValueAvg = sensorValueSum / 100;
+    float sensorValueAvg = sensorValueSum / numReadings;
 
     // Convert to voltage (assuming 10-bit ADC with 5V reference)
     float sensorVolt = (sensorValueAvg / 1023.0) * 5.0;
@@ -57,6 +55,6 @@ void processGasSensor() {
     }
 }
 
-bool getIsGasDetected() {
+bool isGasDetected() {
     return gasDetected;
 }

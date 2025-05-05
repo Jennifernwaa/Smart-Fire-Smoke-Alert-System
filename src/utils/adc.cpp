@@ -3,35 +3,33 @@
 
 #include <avr/io.h>
 
-void initADC0()
+void initADC() // Renamed to a more general initADC as you might use other ADC channels later
 {
+    // Initialize ADC0 (connected to PF0/A0)
     DDRF &= ~(1 << DDF0);
     PORTF &= ~(1 << PORTF0);
-    // Set PF0 (ADC0) as input by clearing the corresponding bit in DDRF
-    // Disable the internal pull-up resistor on PF0 (ADC0) by clearing the corresponding bit in PORTF
+    // Set PF0 (ADC0) as input and disable pull-up
 
     ADMUX |= (1 << REFS0);
-    // Use AVcc (5V) as the reference voltage
-
     ADMUX &= ~(1 << REFS1);
-    // Make sure REFS1 is cleared to select AVcc reference
+    // Use AVcc as reference
 
-    // // Select ADC0 channel (PF0)
-    // ADMUX &= 0xF0; // Clear the lower 4 bits of ADMUX to select ADC0
+    // Select ADC0 channel (PF0). The lower 4 bits of ADMUX control the channel.
+    ADMUX &= 0xF0; // Clear any previous channel selection
+    ADMUX |= 0x00; // Select ADC0 (0b0000)
 
     ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
-    // Enable ADC and set prescaler to 128 (for 16MHz clock, gives 125KHz ADC clock)
+    // Enable ADC and set prescaler to 128
 }
 
 unsigned int readADC()
 {
-    // Start the ADC conversion by setting ADSC (ADC Start Conversion)
+    // Start the ADC conversion
     ADCSRA |= (1 << ADSC);
 
-    // This is a blocking wait, so the program will pause here until the conversion is done
+    // Wait for the conversion to complete
     while (ADCSRA & (1 << ADSC));
 
-    // Return the 10-bit ADC result
+    // Return the ADC result
     return ADC;
 }
-

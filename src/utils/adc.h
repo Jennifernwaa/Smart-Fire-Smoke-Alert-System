@@ -1,9 +1,7 @@
-#ifndef ADC_H
-#define ADC_H
+#ifndef ADC_H_
+#define ADC_H_
 
-#include <avr/io.h>
-
-void initADC0();
+void initADC();
 unsigned int readADC();
 
 #endif

@@ -22,124 +22,56 @@
 // System state flags
 volatile uint8_t alarmActive = 0;
 volatile uint8_t systemEnabled = 1;
+void updateDisplay(const char* line1, const char* line2) {
+  clearDisplay();
+  moveCursor(0, 0);
+  writeString(line1);
+  moveCursor(0, 1);
+  writeString(line2);
+}
 
 int main() {
-
+  // Initialize essential peripherals
   initLED();
-  initPWM();
-  initPWMFan();
-  initTimer1();
-  initTimer0();
+  initBuzzer(); // Initialize the buzzer
+  initADC();   // Initialize the Analog-to-Digital Converter
+  initLCD();
+  updateDisplay("System Initialized", "Monitoring...");
+
+  // Initialize sensors
   initFlameSensor();
   initGasSensor();
 
-  initLCD();
-  moveCursor(0, 0); // moves the cursor to 0, position
-  writeString("Testing");
+  while (1) {
+      // Process gas sensor data
+      processGasSensor();
 
-  while (1){
-    if (isFlameDetected()) {
-        // Flame detected, activate alarm
-        alarmActive = 1;
-        startBuzzer();
-        clearDisplay();
-        moveCursor(0, 1); // moves the cursor to 1, position
-        writeString("Flame Detected!");
-        greenLEDOff();
+      if (isFlameDetected()) {
+          alarmActive = 1;
+          redLEDOn();
+          greenLEDOff();
+          startBuzzer();
+          updateDisplay("ALARM!", "Flame Detected!");
+      } else if (isGasDetected()) {
+          alarmActive = 1;
+          redLEDOn();
+          greenLEDOff();
+          startBuzzer();
+          updateDisplay("ALARM!", "Gas Detected!");
+      } else {
+          alarmActive = 0;
+          redLEDOff();
+          greenLEDOn();
+          updateDisplay("No Threat", "Detected");
+      }
 
-        moveCursor(0, 0); // moves the cursor to 0, position
-        writeString("Red ON");
-        redLEDOn();
-        delayMs(100);
-        redLEDOff();
-        delayMs(100);
-    }else if (getIsGasDetected()) {
-      // Gas detected, activate alarm
-      alarmActive = 1;
-      startBuzzer();
-      clearDisplay();
-      moveCursor(0, 1); // Move the cursor to line 1
-      writeString("Gas Detected!");
-      greenLEDOff();
-
-      moveCursor(0, 0); // Move the cursor to line 0
-      writeString("Red ON");
-      redLEDOn();
-      delayMs(100);
-      redLEDOff();
-      delayMs(100);
-    } else {
-        // No flame detected, deactivate alarm
-        alarmActive = 0;
-        stopBuzzer();
-        moveCursor(0, 1); // moves the cursor to 1, position
-        writeString("No Threat Detected");
-        greenLEDOn();
-        moveCursor(0, 0); // moves the cursor to 0, position
-        writeString("Green ON");
-    }
-    processGasSensor();
-
-
-
-//bla bla
+      delay(1000); // Adjust delay as needed for monitoring frequency
   }
-  return 0;
 
-    
-    // Enable global interrupts
-    // sei();
-    
-    // Main loop
-    // while (1) {
-    //     // Process switch input
-    //     if (isSwitchPressed()) {
-    //         systemEnabled = !systemEnabled;
-            
-    //         if (systemEnabled) {
-    //             // lcdPrintLine1("System Enabled");
-    //             // lcdPrintLine2("Monitoring...");
-    //             // ledOn(LED_GREEN);
-    //             // buzzerOn();
-    //             // _delay_ms(200);
-    //             // buzzerOff();
-    //         } else {
-    //             // lcdPrintLine1("System Disabled");
-    //             // lcdPrintLine2("Press to enable");
-    //             // ledOff(LED_GREEN);
-    //             // buzzerOn();
-    //             // _delay_ms(100);
-    //             // buzzerOff();
-    //             // _delay_ms(100);
-    //             // buzzerOn();
-    //             // _delay_ms(100);
-    //             // buzzerOff();
-    //         }
-            
-    //         // Wait for switch to be released
-    //         while (isSwitchPressed()) {
-    //             // _delay_ms(10);
-    //         }
-    //     }
-        
-    //     // Only process alarms if system is enabled
-    //     if (systemEnabled) {
-    //         // processAlarms();
-    //     } else if (alarmActive) {
-    //         // Turn off all alerts if system is disabled
-    //         // buzzerOff();
-    //         // fanOff();
-    //         // ledOff(LED_RED);
-    //         // alarmActive = 0;
-    //     }
-        
-    //     // Small delay to prevent CPU hogging
-    //     // _delay_ms(100);
-    // }
-    
-    // return 0;
+  return 0;
 }
-// Interrupt Service Routine for Pin Change Interrupt
+
+// Placeholder for Pin Change Interrupt (if you intend to use it later)
 ISR(PCINT0_vect) {
-    // Set flag to indicate interrupt occurred
+  // Set flag to indicate interrupt occurred
 }

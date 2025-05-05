@@ -31,6 +31,7 @@ int main() {
   initTimer1();
   initTimer0();
   initFlameSensor();
+  initGasSensor(); // Initialize the gas sensor
 
   initLCD();
   moveCursor(0, 0); // moves the cursor to 0, position
@@ -52,12 +53,28 @@ int main() {
         delayMs(100);
         redLEDOff();
         delayMs(100);
-    } else {
-        // No flame detected, deactivate alarm
+    } else if (getIsGasDetected()) { // Check the gas sensor status
+        // Gas detected, activate alarm
+        alarmActive = 1;
+        startBuzzer();
+        clearDisplay();
+        moveCursor(0, 1); // moves the cursor to 1, position
+        writeString("Gas Detected!");
+        greenLEDOff();
+
+        moveCursor(0, 0); // moves the cursor to 0, position
+        writeString("Red ON");
+        redLEDOn();
+        delayMs(100);
+        redLEDOff();
+        delayMs(100);
+    }
+     else {
+        // No flame or gas detected, deactivate alarm
         alarmActive = 0;
         stopBuzzer();
         moveCursor(0, 1); // moves the cursor to 1, position
-        writeString("No Flame Detected");
+        writeString("No Threat");
         greenLEDOn();
         moveCursor(0, 0); // moves the cursor to 0, position
         writeString("Green ON");

@@ -20,6 +20,8 @@ float readGasConcentration();
 // Check if gas level is above threshold
 bool isGasDetected();
 
+bool getIsGasDetected(); // Getter function for gasDetected
+
 // Check if the gas sensor has failed
 bool isSensorFailed();
 

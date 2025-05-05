@@ -1,5 +1,4 @@
 #include "utils/timer.h"
-#include "output/buzzer.h"
 #include "utils/adc.h"
 #include "gasSensor.h"
 
@@ -150,22 +149,21 @@ void processGasSensor() {
     Serial.print("Gas Ratio (RS/R0): ");
     Serial.println(ratio);
 
-    // Process gas detection with redundancy check
-    if (isGasDetected()) {
-        Serial.println("ALERT: Dangerous gas level confirmed!");
-        // Activate alerts
-        buzzerOn();
-        fanOn();
-        // sendGSMAlert();
-    } else {
-        if (consecutiveAlerts > 0) {
-            Serial.print("Potential gas detected. Confirmation: ");
-            Serial.print(consecutiveAlerts);
-            Serial.print("/");
-            Serial.println(CONSECUTIVE_READINGS_REQUIRED);
-        } else {
-            Serial.println("Air quality normal.");
-            buzzerOff();
-        }
-    }
+    // // Process gas detection with redundancy check
+    // if (isGasDetected()) {
+    //     Serial.println("ALERT: Dangerous gas level confirmed!");
+    //     // Activate alerts
+    //     buzzerOn();
+    //     fanOn();
+    //     // sendGSMAlert();
+    // } else {
+    //     if (consecutiveAlerts > 0) {
+    //         Serial.print("Potential gas detected. Confirmation: ");
+    //         Serial.print(consecutiveAlerts);
+    //         Serial.print("/");
+    //         Serial.println(CONSECUTIVE_READINGS_REQUIRED);
+    //     } else {
+    //         Serial.println("Air quality normal.");
+    //         buzzerOff();
+    //     }
 }

@@ -55,6 +55,7 @@ int main() {
     } else {
         // No flame detected, deactivate alarm
         alarmActive = 0;
+        stopBuzzer();
         moveCursor(0, 1); // moves the cursor to 1, position
         writeString("No Flame Detected");
         greenLEDOn();

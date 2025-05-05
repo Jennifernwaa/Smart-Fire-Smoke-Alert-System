@@ -5,10 +5,6 @@ void initFlameSensor() {
     DDRH &= ~(1 << PH3); // Set PH3 (Pin 6) as input
 }
 
-// bool isFlameDetected() {
-//     // Read the state of the flame sensor pin
-//     return (PINH & (1 << PH3)) == 0; // Active low, so check if the pin is low
-// }
 
 bool isFlameDetected() {
     // Read the state of the flame sensor pin

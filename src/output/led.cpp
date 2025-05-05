@@ -6,17 +6,17 @@ void initLED() {
 }
 
 void redLEDOn() {
-    PORTC |= (1 << PC7); // Set PE4 high to turn on red LED
+    PORTC |= (1 << PC7); // Set PC7 high to turn on red LED
 }
 
 void redLEDOff() {
-    PORTC &= ~(1 << PC7); // Set PE4 low to turn off red LED
+    PORTC &= ~(1 << PC7); // Set PC7 low to turn off red LED
 }
 
 void greenLEDOn() {
-    PORTC |= (1 << PC6); // Set PE5 high to turn on green LED
+    PORTC |= (1 << PC6); // Set PC6 high to turn on green LED
 }
 
 void greenLEDOff() {
-    PORTC &= ~(1 << PC6); // Set PE5 low to turn off green LED
+    PORTC &= ~(1 << PC6); // Set PC6 low to turn off green LED
 }

@@ -5,11 +5,11 @@
 
 // Constants for the gas sensor
 #define RL 10.0            // Load resistance in kilo ohms
-#define THRESHOLD_RATIO 0.15 // Adjusted threshold for gas detection (RS/R0)
+#define THRESHOLD_RATIO 100 // Adjusted threshold for gas detection (RS/R0)
 
 // R0 calibration value for clean air
 // This MUST be calibrated for your specific sensor in a clean air environment.
-float R0 = 0.85;
+float R0 = 1.03;
 
 // State tracking variable
 bool gasDetected = false;

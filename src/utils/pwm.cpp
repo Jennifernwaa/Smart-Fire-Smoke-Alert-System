@@ -20,7 +20,7 @@ void initPWM() {
 
 void initPWMFan() {
     // Set Fast PWM mode with ICR3 as TOP
-    DDRE |= (1 << PE5);             // Set PE3 (OC3A) as output
+    DDRE |= (1 << PE5);             // Set PE5 (OC3C) as output
     TCCR3A |= (1 << COM3C1) | (1 << WGM31); // Fast PWM, non-inverting mode on OC3A
     TCCR3B |= (1 << WGM32) | (1 << CS30);  // Continue Fast PWM, no prescaler
 

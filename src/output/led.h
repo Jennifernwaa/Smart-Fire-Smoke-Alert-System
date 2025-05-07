@@ -6,5 +6,6 @@ void redLEDOn();
 void redLEDOff();
 void greenLEDOn();
 void greenLEDOff();
+void toggleRedLED();
 
 #endif

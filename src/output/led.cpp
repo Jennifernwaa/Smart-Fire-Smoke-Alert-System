@@ -20,3 +20,7 @@ void greenLEDOn() {
 void greenLEDOff() {
     PORTC &= ~(1 << PC6); // Set PC6 low to turn off green LED
 }
+
+void toggleRedLED() {
+    PORTC ^= (1 << PC7); // Toggle the state of red LED
+}

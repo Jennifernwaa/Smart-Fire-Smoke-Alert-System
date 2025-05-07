@@ -4,32 +4,20 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-// Debounce delay in milliseconds
-#define DEBOUNCE_DELAY 50
-
-// Volatile flag to indicate switch state change
-volatile uint8_t switchStateChanged = 0;
 
 /*
  * Initializes pull-up resistor on PB3 and sets it into input mode
  */
 void initSwitch() {
-    // Initialize the switch as input
-     // Set Pin as input
-    
-    // Enable the internal pull-up resistor on Pin
+    DDRD &= ~(1 << DDD3);   // initialize D3 (pin 18) as input
+    PORTD |= (1 << PORTD3); // enable pull up resistor
+    EIMSK |= (1 << INT3);   // Enable INT3 interrupt
 
-
-    // Enable pin change interrupt for PCINT of the Pin (Pin)
-    // Enable PCINT0 interrupt group
-    // Enable interrupt for Pin
+    //add comment for this
+    EICRA &= ~(1 << ISC31);
+    EICRA &= ~(1 << ISC30);
 }
 
-// Read the current state of the switch
-uint8_t readSwitch() {
-    // If using INPUT_PULLUP, the logic is inverted (LOW means pressed)
-    return (PINB & (1 << PINB3)) ? SWITCH_OPEN : SWITCH_CLOSED; //ganti pin number
-}
 
 
 

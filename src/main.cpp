@@ -66,7 +66,6 @@ int main() {
     // Initialize sensors
     initFlameSensor();
     initGasSensor();
-    startFan(); // Start the fan at the beginning
     sei(); // Enable global interrupts
 
     while (1) {
@@ -79,40 +78,35 @@ int main() {
         // Process gas sensor data
         processGasSensor();
 
-        if (isFlameDetected()) {
+        if (isFlameDetected() || isGasDetected()) {
             alarmActive = 1;
             startBuzzer();
             clearDisplay();
             greenLEDOff();
             toggleRedLED();
-
-            if (isGasDetected()) {
-                Serial.println("Gas also Detected!");
-                updateDisplay("ALARM!", "Gas Detected!"); // still need changes on the display
+            startFan();
+// matiin sendSMS before actually serious demo!!
+            if (isFlameDetected() && isGasDetected()) {
+                Serial.println("Flame and Gas Detected!");
+                updateDisplay("ALARM!", "Flame & Gas!"); // still need changes on the display
+                sendSMS(); // Call the sendSMS function when an alarm occurs
+            } else if (isFlameDetected()) {
+                Serial.println("Flame Detected!");
+                updateDisplay("Red ON", "Flame Detected!");
+                sendSMS(); // Call the sendSMS function when an alarm occurs
+            } else if (isGasDetected()) {
+                Serial.println("Gas Detected!");
+                updateDisplay("Red ON", "Gas Detected!");
+                sendSMS(); // Call the sendSMS function when an alarm occurs
             } else {
                 Serial.println("No Gas Detected!");
                 updateDisplay("Red ON", "Flame Detected!"); // still need changes on the display
-            }
-        } else if (isGasDetected()){
-            Serial.println("Gas detected!");
-            alarmActive = 1;
-
-            startBuzzer();
-            clearDisplay();
-            greenLEDOff();
-            toggleRedLED();
-
-            if (isFlameDetected()) {
-                Serial.println("Flame also Detected!");
-                updateDisplay("ALARM!", "Flame Detected!"); // still need changes on the display
-            } else {
-                Serial.println("No Flame Detected!");
-                updateDisplay("Red ON", "Gas Detected!"); // still need changes on the display
+                sendSMS(); // Call the sendSMS function when an alarm occurs
             }
         } else {
             alarmActive = 0;
             greenLEDOn(); 
-            updateDisplay("No Threat", "Detected");
+            updateDisplay("Safe", "Nothing Detected");
             Serial.println("No Threat Detected");
         }
         delay(1000); // Adjust delay as needed for monitoring frequency
@@ -133,7 +127,7 @@ ISR(INT3_vect){
     alarmState = ALARM_OFF; // change the alarm state to false (turning off the buzzer)
     alarmActive = 0;        // Reset alarm active flag
 
-        // Update the LCD display to show the system is reset
+    // Update the LCD display to show the system is reset
     updateDisplay("System Reset", "Monitoring...");
 
     // Debounce the button

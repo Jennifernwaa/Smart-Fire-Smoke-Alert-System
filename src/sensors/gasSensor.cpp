@@ -25,7 +25,7 @@ float readGasRatio() {
     // Take multiple readings and average them
     for (int i = 0; i < 100; i++) {
 
-        sensorValueSum += analogRead(A0); 
+        sensorValueSum += readADC(); 
         delayUs(50); // Adjusted delay for stability
     }
     float sensorValueAvg = sensorValueSum / 100;
@@ -36,28 +36,34 @@ float readGasRatio() {
     // Calculate gas sensor resistance (RS)
     float RS_gas = (5.0 - sensorVolt) / sensorVolt;
 
-    
-
     // Calculate ratio (RS/R0)
     return RS_gas / R0;
 }
 
 void processGasSensor() {
-    float ratio = readGasRatio();
-    Serial.print("Gas Ratio (RS/R0): ");
-    Serial.println(ratio);
+    const int requiredDetections = 3; // Number of consistent detections before triggering
+    int detectionCount = 0;
 
-    
+    for (int i = 0; i < requiredDetections; i++) {
+        float ratio = readGasRatio();
+        Serial.print("Gas Ratio (RS/R0): ");
+        Serial.println(ratio);
 
-    // Check if gas concentration exceeds threshold
-    if (ratio < THRESHOLD_RATIO) {
+        if (ratio < THRESHOLD_RATIO) {
+            detectionCount++;
+        }
+        delay(100); // Small delay between checks
+    }
+
+    if (detectionCount == requiredDetections) {
         gasDetected = true;
-        Serial.println("Gas detected!");
+        Serial.println("Gas detected (verified with redundancy)!");
     } else {
         gasDetected = false;
-        Serial.println("No gas detected.");
+        Serial.println("No gas detected (redundant check).");
     }
 }
+
 
 bool isGasDetected() {
     return gasDetected;

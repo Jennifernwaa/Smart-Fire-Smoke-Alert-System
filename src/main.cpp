@@ -13,6 +13,7 @@
 
 #include "output/lcd.h"
 #include "output/led.h"
+#include "output/fan.h"
 
 
 // #include <util/delay.h>
@@ -54,7 +55,8 @@ int main() {
     initTimer1(); // Initialize Timer1 for timing functions
     initADC();   // Initialize the Analog-to-Digital Converter
     initSwitch(); // Initialize the switch for button press
-    initLCD();
+    initLCD(); // Initialize the LCD display
+    initFanMosfet(); // Initialize the fan MOSFET control
 
     Serial.begin(9600); // Initialize serial communication for debugging
     Serial.println("System Starting...");
@@ -85,7 +87,7 @@ int main() {
             greenLEDOff();
             toggleRedLED();
             startFan();
-// matiin sendSMS before actually serious demo!!
+            // matiin sendSMS before actually serious demo!!
             if (isFlameDetected() && isGasDetected()) {
                 Serial.println("Flame and Gas Detected!");
                 updateDisplay("ALARM!", "Flame & Gas!"); // still need changes on the display
@@ -94,15 +96,16 @@ int main() {
                 Serial.println("Flame Detected!");
                 updateDisplay("Red ON", "Flame Detected!");
                 sendSMS(); // Call the sendSMS function when an alarm occurs
-            } else if (isGasDetected()) {
+            } else {
                 Serial.println("Gas Detected!");
                 updateDisplay("Red ON", "Gas Detected!");
                 sendSMS(); // Call the sendSMS function when an alarm occurs
-            } else {
-                Serial.println("No Gas Detected!");
-                updateDisplay("Red ON", "Flame Detected!"); // still need changes on the display
-                sendSMS(); // Call the sendSMS function when an alarm occurs
-            }
+            } 
+            // else {
+            //     Serial.println("No Gas Detected!");
+            //     updateDisplay("Red ON", "Flame Detected!"); // still need changes on the display
+            //     sendSMS(); // Call the sendSMS function when an alarm occurs
+            // }
         } else {
             alarmActive = 0;
             greenLEDOn(); 
@@ -116,7 +119,6 @@ int main() {
 }
 
 ISR(INT3_vect){
-
     state = wait_release; // change the state of button
     stopBuzzer();                    // turn off the buzzer
     stopFan();                       // turn off the fan

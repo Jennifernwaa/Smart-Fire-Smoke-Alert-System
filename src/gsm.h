@@ -1,12 +1,10 @@
 #ifndef GSM_H
 #define GSM_H
 
-#include <Arduino.h>
 #include <SoftwareSerial.h>
 
-SoftwareSerial SIM900(7, 8); // RX, TX
+extern SoftwareSerial SIM900; // Declare the SIM900 object as external
 
-void sendSMSCommand();
 void sendSMS();
 
 #endif

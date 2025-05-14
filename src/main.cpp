@@ -48,8 +48,7 @@ void updateDisplay(const char* line1, const char* line2) {
 
 int main() {
     // Initialize essential peripherals
-    initLED();
-    initPWMFan(); // Initialize PWM for fan control
+    initLED();  
     initPWM();   // Initialize PWM for buzzer controlin
     initTimer0(); // Initialize Timer0 for timing functions
     initTimer1(); // Initialize Timer1 for timing functions
@@ -57,6 +56,13 @@ int main() {
     initSwitch(); // Initialize the switch for button press
     initLCD(); // Initialize the LCD display
     initFanMosfet(); // Initialize the fan MOSFET control
+
+    // Arduino communicates with SIM900 GSM shield at a baud rate of 19200
+    // Make sure that corresponds to the baud rate of your module
+    SIM900.begin(19200);
+    
+    // // Give time to your GSM shield log on to network
+    // delayMs(20000);  
 
     Serial.begin(9600); // Initialize serial communication for debugging
     Serial.println("System Starting...");
@@ -101,11 +107,6 @@ int main() {
                 updateDisplay("Red ON", "Gas Detected!");
                 sendSMS(); // Call the sendSMS function when an alarm occurs
             } 
-            // else {
-            //     Serial.println("No Gas Detected!");
-            //     updateDisplay("Red ON", "Flame Detected!"); // still need changes on the display
-            //     sendSMS(); // Call the sendSMS function when an alarm occurs
-            // }
         } else {
             alarmActive = 0;
             greenLEDOn(); 

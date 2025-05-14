@@ -18,30 +18,6 @@ void initPWM() {
     
 }
 
-void initPWMFan() {
-    // Set Fast PWM mode with ICR3 as TOP
-    DDRE |= (1 << PE5);             // Set PE5 (OC3C) as output
-    TCCR3A |= (1 << COM3C1) | (1 << WGM31);
-    TCCR3B |= (1 << WGM32) | (1 << CS31);  // Changed CS30 (no prescaler) to CS31 (prescaler of 8)
-
-    // Set non-inverted mode for OC3C (Pin 5)
-    // Set prescaler to 8 for 2MHz frequency
-    // Set the PWM frequency to 1kHz - IDK if this is correct
-    OCR3C = 0;  // Initial duty cycle 0
-}
-
-void startFan() {
-    OCR3C = 1023; // Briefly set to maximum duty cycle
-    delayMs(50);   // Short delay at full power
-    OCR3C = 800;  // Then set to the desired running speed (100% in your case)
-}
-void stopFan() {
-    // Set the fan speed to 0% (off)
-    OCR3C = 0; // Set duty cycle to 0%
-}
-
-
-
 //Do we need this if udh ada buzzer.cpp??
 // Start chirping by cycling through different frequencies
 void startBuzzer() {

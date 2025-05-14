@@ -5,7 +5,7 @@
 
 // Constants for the gas sensor
 #define RL 10.0            // Load resistance in kilo ohms
-#define THRESHOLD_RATIO 3.85 // Adjusted threshold for gas detection (RS/R0)
+#define THRESHOLD_RATIO 8.5 // Adjusted threshold for gas detection (RS/R0)
 
 // R0 calibration value for clean air
 // This MUST be calibrated for your specific sensor in a clean air environment.
@@ -57,10 +57,8 @@ void processGasSensor() {
 
     if (detectionCount == requiredDetections) {
         gasDetected = true;
-        Serial.println("Gas detected (verified with redundancy)!");
     } else {
         gasDetected = false;
-        Serial.println("No gas detected (redundant check).");
     }
 }
 

@@ -2,7 +2,6 @@
 #include <Arduino.h>
 #include "utils/timer.h"
 
-
 void initFanMosfet() {
     DDRE |= (1 << PE5); // Set PE5 as output
 }

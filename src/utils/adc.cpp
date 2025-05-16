@@ -3,7 +3,7 @@
 
 #include <avr/io.h>
 
-void initADC() // Renamed to a more general initADC as you might use other ADC channels later
+void initADC()
 {
     // Initialize ADC0 (connected to PF0/A0)
     DDRF &= ~(1 << DDF0);
